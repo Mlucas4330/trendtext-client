@@ -98,8 +98,4 @@ export const AuthProvider = ({ children }) => {
     )
 }
 
-AuthProvider.propTypes = {
-    children: PropTypes.node,
-}
-
 export const useAuth = () => useContext(AuthContext)
