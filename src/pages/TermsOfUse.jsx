@@ -93,7 +93,7 @@ function TermsOfUse() {
                 </Text>
             </Box>
             <Box align="center">
-                <Anchor href="privacy-policy" label="Política de Privacidade" />
+                <Anchor href="/privacy-policy" label="Política de Privacidade" />
                 <Text size="small">Ao utilizar a TrendText, você confirma que leu e concorda com nossos Termos de Uso.</Text>
             </Box>
         </>

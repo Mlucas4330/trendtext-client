@@ -28,13 +28,13 @@ function Header() {
                                 {user ?
                                     <>
                                         <Text size="xlarge" margin={'none'}>Créditos: {user.credits}</Text>
-                                        <Anchor label="Gerar Vídeos" href="create" />
-                                        <Anchor label="Preços" href="pricing" />
+                                        <Anchor label="Gerar Vídeos" href="/create" />
+                                        <Anchor label="Preços" href="/pricing" />
                                         <Anchor label="Sair" onClick={signOut} />
                                     </> :
                                     <>
-                                        <Anchor label="Entrar" href="sign-in" />
-                                        <Anchor label="Cadastrar" href="sign-up" />
+                                        <Anchor label="Entrar" href="/sign-in" />
+                                        <Anchor label="Cadastrar" href="/sign-up" />
                                     </>
                                 }
                             </Box>

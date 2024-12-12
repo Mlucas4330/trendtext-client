@@ -16,8 +16,8 @@ function Footer() {
                 <Box>
                     <Heading size="small" margin={'none'}>Legal</Heading>
                     <Box>
-                        <Anchor color={'brand'} href={'terms-of-use'}>Termos de Uso</Anchor>
-                        <Anchor color={'brand'} href={'privacy-policy'}>Política de Privacidade</Anchor>
+                        <Anchor color={'brand'} href={'/terms-of-use'}>Termos de Uso</Anchor>
+                        <Anchor color={'brand'} href={'/privacy-policy'}>Política de Privacidade</Anchor>
                         <Text>CNPJ: 54.955.173/0001-92</Text>
                     </Box>
                 </Box>

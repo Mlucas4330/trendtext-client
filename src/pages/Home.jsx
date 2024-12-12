@@ -51,7 +51,7 @@ function Home() {
                     </Heading>
                     <Text textAlign="center">Você está cansado de gastar horas editando vídeos manualmente?</Text>
                 </Box>
-                <Button alignSelf="center" size="medium" pad={'medium'} color="control" secondary href="create" label="Gerar vídeos agora" />
+                <Button alignSelf="center" size="medium" pad={'medium'} color="control" secondary href="/create" label="Gerar vídeos agora" />
             </Box>
 
             <Box ref={(el) => (elementsRef.current[1] = el)} gap={'large'} animation={visibleElements.includes(elementsRef.current[1]) ? 'slideLeft' : undefined}>
@@ -75,7 +75,7 @@ function Home() {
                 }}>
                     {
                         niches.map((item, index) => (
-                            <Button key={`niches_${index}`} secondary color={'brand'} href={`create?niche=${item.value}`} label={item.label} />
+                            <Button key={`niches_${index}`} secondary color={'brand'} href={`/create?niche=${item.value}`} label={item.label} />
                         ))
                     }
                 </Box>
@@ -107,7 +107,7 @@ function Home() {
                                 <CardFooter>
                                     <Button secondary fill style={{
                                         textAlign: 'center'
-                                    }} label="Gerar Vídeos" href={`pricing?plan=${plan.price}`} />
+                                    }} label="Gerar Vídeos" href={`/pricing?plan=${plan.price}`} />
 
                                 </CardFooter>
                             </Card>
