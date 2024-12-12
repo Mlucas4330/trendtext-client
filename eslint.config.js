@@ -16,6 +16,7 @@ export default [
   {
     rules: {
       'quotes': ['error', 'single', { 'allowTemplateLiterals': true }],
+      'react/prop-types': 'off',
       'semi': ['error', 'never'],
       'no-extra-semi': 'error'
     }

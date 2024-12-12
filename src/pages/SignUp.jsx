@@ -21,7 +21,7 @@ function SignUp() {
             </FormField>
             <Button fill busy={busy} secondary type="submit" label="Cadastrar" />
             <Box pad={'small'}>
-                <Text alignSelf="center">Já tem uma conta? <Anchor href="/sign-in">Entrar</Anchor></Text>
+                <Text alignSelf="center">Já tem uma conta? <Anchor href="sign-in">Entrar</Anchor></Text>
             </Box>
         </Form>
     </>

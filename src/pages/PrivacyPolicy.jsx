@@ -71,7 +71,7 @@ function PrivacyPolicy() {
                 </Text>
             </Box>
             <Box align="center">
-                <Anchor href="/terms-of-use" label="Termos de Uso" />
+                <Anchor href="terms-of-use" label="Termos de Uso" />
                 <Text size="small">Ao utilizar a TrendText, você confirma que leu e concorda com nossos Termos de Uso.</Text>
             </Box>
         </>
