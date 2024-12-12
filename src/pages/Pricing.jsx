@@ -6,6 +6,7 @@ import { useEffect, useState, React } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import toast from 'react-hot-toast'
 
 function Pricing() {
     const navigate = useNavigate()

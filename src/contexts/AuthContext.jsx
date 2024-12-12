@@ -47,7 +47,12 @@ export const AuthProvider = ({ children }) => {
 
             const { data } = await axios.post(import.meta.env.VITE_BASE_URL + '/users/sign-in', value)
 
-            Cookies.set('token', data.token)
+            Cookies.set('token', data.token, {
+                domain: '.trendtext.com.br',
+                path: '/',
+                httpOnly: true,
+                sameSite: 'None'
+            })
             setUser(data.user)
 
             toast.success(data.message)
