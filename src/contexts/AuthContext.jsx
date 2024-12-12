@@ -50,6 +50,7 @@ export const AuthProvider = ({ children }) => {
             Cookies.set('token', data.token, {
                 domain: '.trendtext.com.br',
                 path: '/',
+                secure: true,
                 httpOnly: true,
                 sameSite: 'None'
             })
