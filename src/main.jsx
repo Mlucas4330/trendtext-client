@@ -6,6 +6,7 @@ import { deepMerge } from 'grommet/utils/index.js'
 import { AuthProvider } from './contexts/AuthContext.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 
 const theme = deepMerge(grommet, {
   global: {
@@ -34,12 +35,14 @@ const theme = deepMerge(grommet, {
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Grommet theme={theme} full="min">
-      <BrowserRouter>
-        <AuthProvider>
-          <App />
-          <Toaster position="bottom-center" />
-        </AuthProvider>
-      </BrowserRouter>
+      <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID}>
+        <BrowserRouter>
+          <AuthProvider>
+            <App />
+            <Toaster position="bottom-center" />
+          </AuthProvider>
+        </BrowserRouter>
+      </GoogleOAuthProvider>
     </Grommet>
   </StrictMode>
 )

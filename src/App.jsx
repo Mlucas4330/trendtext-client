@@ -14,7 +14,10 @@ import { Main } from 'grommet'
 function App() {
   return (
     <>
-      <Main gap={{ row: 'xlarge' }} pad={'large'}>
+      <Main gap={{ row: 'xlarge' }} pad={{
+        vertical: 'medium',
+        horizontal: 'xlarge'
+      }}>
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />

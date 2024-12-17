@@ -75,7 +75,7 @@ function Home() {
                 }}>
                     {
                         niches.map((item, index) => (
-                            <Button key={`niches_${index}`} secondary color={'brand'} href={`/create?niche=${item.value}`} label={item.label} />
+                            <Button key={`niches_${index}`} secondary color={'brand'} href={`/create`} label={item.label} />
                         ))
                     }
                 </Box>

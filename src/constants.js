@@ -5,57 +5,6 @@ import video4 from './assets/video4.mp4'
 import video5 from './assets/video5.mp4'
 import { currency, formatDate } from './helpers'
 
-export const niches = [
-    {
-        label: 'Cultura Pop',
-        value: 'pop_culture'
-    },
-    {
-        label: 'Ditados Populares',
-        value: 'popular_sayings'
-    },
-    {
-        label: 'Educação',
-        value: 'education'
-    },
-    {
-        label: 'Esporte e Motivação',
-        value: 'sports_motivation'
-    },
-    {
-        label: 'Filosofia',
-        value: 'philosophy'
-    },
-    {
-        label: 'Finanças',
-        value: 'finance'
-    },
-    {
-        label: 'Humor',
-        value: 'humor'
-    },
-    {
-        label: 'Motivacional',
-        value: 'motivational'
-    },
-    {
-        label: 'Reflexões',
-        value: 'reflections'
-    },
-    {
-        label: 'Relacionamentos',
-        value: 'relationships'
-    },
-    {
-        label: 'Saúde Mental',
-        value: 'mental_health'
-    },
-    {
-        label: 'Trabalho e Carreira',
-        value: 'work_career'
-    }
-]
-
 export const frequently_asked = [
     {
         question: 'Os vídeos gerados são protegidos por direitos autorais?',
@@ -64,33 +13,19 @@ export const frequently_asked = [
     {
         question: 'O site oferece suporte técnico em caso de problemas?',
         answer: 'Sim, o site oferece suporte técnico através de e-mail para ajudar os usuários com quaisquer questões ou problemas que possam ocorrer.'
+    },
+    {
+        question: 'O site possui uma biblioteca de vídeos?',
+        answer: 'Atualmente, o site não possui uma biblioteca de vídeos. Recomendamos buscar vídeos em plataformas como Pexels, Vimeo, ou Pinterest.'
     }
 ]
 
-export const templates = [
+export const fonts = [
     {
-        title: 'Normal',
+        title: 'Roboto',
         fontFamily: 'Roboto, sans-serif',
         color: 'white',
         stroke: 'none'
-    },
-    {
-        title: 'Normal Yellow',
-        fontFamily: 'Roboto, sans-serif',
-        color: 'yellow',
-        stroke: 'none',
-    },
-    {
-        title: 'Border',
-        fontFamily: 'Roboto, sans-serif',
-        color: 'white',
-        stroke: '1px black',
-    },
-    {
-        title: 'Border Yellow',
-        fontFamily: 'Roboto, sans-serif',
-        color: 'yellow',
-        stroke: '1px black',
     }
 ]
 
@@ -100,6 +35,48 @@ export const videos = [
     { src: video3 },
     { src: video4 },
     { src: video5 },
+]
+
+export const videoQuantities = [
+    {
+        label: '1 Vídeo',
+        value: 1
+    },
+    {
+        label: '2 Vídeos',
+        value: 2
+    },
+    {
+        label: '3 Vídeos',
+        value: 3
+    },
+    {
+        label: '7 Vídeos',
+        value: 7
+    },
+    {
+        label: '14 Vídeos',
+        value: 14
+    },
+    {
+        label: '21 Vídeos',
+        value: 21
+    }
+]
+
+export const videoDurations = [
+    {
+        label: '10 Segundos',
+        value: 10
+    },
+    {
+        label: '30 Segundos',
+        value: 30
+    },
+    {
+        label: '60 Segundos',
+        value: 60
+    }
 ]
 
 export const plans = [
