@@ -16,9 +16,7 @@ function SignIn() {
     };
 
     return <>
-        <Box margin={{
-            horizontal: 'xlarge'
-        }}>
+        <Box>
             <Form messages={{
                 required: 'Campo obrigatório'
             }} onSubmit={({ value }) => signIn(value)}>

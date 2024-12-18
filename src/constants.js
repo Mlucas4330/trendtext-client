@@ -15,18 +15,36 @@ export const frequently_asked = [
         answer: 'Sim, o site oferece suporte técnico através de e-mail para ajudar os usuários com quaisquer questões ou problemas que possam ocorrer.'
     },
     {
-        question: 'O site possui uma biblioteca de vídeos?',
-        answer: 'Atualmente, o site não possui uma biblioteca de vídeos. Recomendamos buscar vídeos em plataformas como Pexels, Vimeo, ou Pinterest.'
+        question: 'Quantos créditos são necessários para gerar um vídeo?',
+        answer: 'Cada vídeo gerado custa 21 créditos.'
+    },
+    {
+        question: 'Quais são os métodos de pagamento disponíveis?',
+        answer: 'Os pagamentos podem ser realizados através do Mercado Pago, oferecendo diversas opções para sua conveniência: Pix, Cartão de crédito e Boleto bancário. Escolha o método que mais se adapta à sua necessidade.'
     }
 ]
 
 export const fonts = [
     {
         title: 'Roboto',
-        fontFamily: 'Roboto, sans-serif',
-        color: 'white',
-        stroke: 'none'
-    }
+        fontFamily: 'Roboto, sans-serif'
+    },
+    {
+        title: 'Montserrat',
+        fontFamily: 'Montserrat, serif'
+    },
+    {
+        title: 'Poppins',
+        fontFamily: 'Poppins, serif'
+    },
+    {
+        title: 'Open Sans',
+        fontFamily: 'Open Sans, serif'
+    },
+    {
+        title: 'Quicksand',
+        fontFamily: 'Quicksand, serif'
+    },
 ]
 
 export const videos = [
@@ -83,17 +101,17 @@ export const plans = [
     {
         price: 19.90,
         title: '105 Créditos',
-        benefits: ['Até 7 Vídeos', 'Até 20 frases', '105 Créditos']
+        benefits: ['105 Créditos']
     },
     {
         price: 29.90,
         title: '210 Créditos',
-        benefits: ['Até 14 Vídeos', 'Até 50 frases', '210 Créditos']
+        benefits: ['210 Créditos']
     },
     {
         price: 39.90,
         title: '315 Créditos',
-        benefits: ['Até 21 Vídeos', 'Até 100 frases', '315 Créditos']
+        benefits: ['315 Créditos']
     }
 ]
 

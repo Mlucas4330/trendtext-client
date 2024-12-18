@@ -1,21 +1,27 @@
-import { Box, Button, FormField, Select, Text, TextInput } from 'grommet'
-import { React, useEffect, useRef, useState } from 'react'
-import { templates, video_height, video_width } from '../constants'
-import { BlockQuote, Bold, Italic, LinkBottom, LinkTop, Shift, TextAlignCenter, TextAlignFull, TextAlignLeft, TextAlignRight, Underline } from 'grommet-icons'
+import { Box, Button, Collapsible, FileInput, Form, FormField, ResponsiveContext, Select, TextInput } from 'grommet'
+import { React, useContext, useEffect, useRef, useState } from 'react'
+import { fonts, video_height, video_width } from '../constants'
+import { Add, Bold, Brush, Download, Edit, Facebook, Grommet, Instagram, Italic, LinkBottom, LinkTop, Share, Shift, Subtract, TextAlignCenter, TextAlignLeft, TextAlignRight, Tiktok, Youtube } from 'grommet-icons'
+import { CompactPicker } from 'react-color'
 
 function Preview({ src, text }) {
+    const size = useContext(ResponsiveContext);
     const canvas = useRef(null)
     const [quote, setQuote] = useState(text)
     const [url, setUrl] = useState(src)
-    const [blockquote, setBlockQuote] = useState(false)
+    const [video, setVideo] = useState(null)
     const [bold, setBold] = useState(false)
-    const [underline, setUnderline] = useState(false)
+    const [displayColorPicker, setDisplayColorPicker] = useState(false)
     const [italic, setItalic] = useState(false)
+    const [stroke, setStroke] = useState(false)
     const [activeAlignment, setActiveAlignment] = useState(2)
     const [activeTextAlignment, setActiveTextAlignment] = useState(2)
-    const [color, setColor] = useState('#FFFFFF')
-    const [font, setFont] = useState('roboto')
-    const [fontSize, setFontSize] = useState('12')
+    const [editActive, setEditActive] = useState(false)
+    const [customizationActive, setCustomizationActive] = useState(false)
+    const [shareActive, setShareActive] = useState(false)
+    const [color, setColor] = useState("#FFFFFF")
+    const [font, setFont] = useState('Roboto, sans-serif')
+    const [fontSize, setFontSize] = useState(12)
 
     const handleActive = (get, set, length) => {
         if (get >= length) {
@@ -30,228 +36,119 @@ function Preview({ src, text }) {
             const url = URL.createObjectURL(files[0])
 
             setUrl(url)
+
+            setVideo(null)
         } catch (error) {
             console.error('Erro ao adicionar vídeo: ' + error.message)
         }
     }
 
-    // const handleIA = async () => {
-    //     try {
-    //         if (!niche) {
-    //             toast.error('Seleciona um nicho!')
-    //             return
-    //         }
+    const drawTextToCanvas = (canvas, ctx, quote, activeTextAlignment, activeAlignment, bold, italic, color, font, fontSize, stroke) => {
+        const centerX = canvas.width / 2;
+        const maxWidth = canvas.width * 0.9;
+        const lineHeight = fontSize * 1.2;
 
-    //         if (!user || user.credits < 7) {
-    //             toast.error('Sem créditos o suficiente para gerar frases!')
-    //             return
-    //         }
+        ctx.font = `${italic ? 'italic' : ''} ${bold ? 'bold' : ''} ${fontSize}px ${font}`;
+        ctx.fillStyle = color;
 
-    //         const { data } = await toast.promise(
-    //             axios.post(import.meta.env.VITE_BASE_URL + '/openai/assistant', { niche }, { withCredentials: true }),
-    //             {
-    //                 loading: 'Gerando frases...',
-    //                 success: 'Frases geradas com sucesso!',
-    //                 error: 'Erro ao gerar as frases!',
-    //             })
-
-    //         setPhrases(prevPhrases => [...prevPhrases, ...data])
-
-    //         await decrementCredits(7)
-    //     } catch (error) {
-    //         console.error('Erro ao gerar frases: ' + error.message)
-    //     }
-    // }
-
-    // const deletePhrase = (index) => {
-    //     setPhrases(phrases.filter((_, i) => i !== index))
-    // }
-
-    // const handleEditPhrase = (phrase, index) => {
-    //     const updatedPhrases = [...phrases]
-
-    //     updatedPhrases[index] = phrase
-
-    //     setPhrases(updatedPhrases)
-    // }
-
-
-
-
-
-
-    // const processVideo = async (index = 0) => {
-    //     try {
-    //         if (index >= files.length) {
-    //             setBusy(false)
-    //             toast.success('Vídeos gerados com sucesso!')
-    //             return
-    //         }
-
-    //         const video = document.createElement('video')
-    //         video.src = files[index].src
-    //         video.loop = false
-    //         video.muted = true
-
-    //         const phrase = phrases[index % phrases.length]
-
-    //         const canvas = document.createElement('canvas')
-    //         canvas.width = video_width.real
-    //         canvas.height = video_height.real
-
-    //         const ctx = canvas.getContext('2d')
-
-    //         const recordedChunks = []
-
-    //         const stream = canvas.captureStream(60)
-
-    //         const mediaRecorder = new MediaRecorder(stream, {
-    //             mimeType: 'video/mp4',
-    //             videoBitsPerSecond: 25000000
-    //         })
-
-    //         await loadVideo(video)
-
-    //         drawToCanvas(canvas, ctx, video, phrase)
-
-    //         mediaRecorder.ondataavailable = (e) => {
-    //             if (e.data.size > 0) {
-    //                 recordedChunks.push(e.data)
-    //             }
-    //         }
-
-    //         mediaRecorder.onstop = async () => {
-    //             const blob = new Blob(recordedChunks, { type: 'video/mp4' })
-    //             const url = URL.createObjectURL(blob)
-
-    //             setUrls(prevUrls => [...prevUrls, url])
-
-    //             processVideo(index + 1)
-
-    //             canvas.remove()
-    //             video.remove()
-
-    //             await decrementCredits(20)
-    //         }
-
-    //         video.onended = () => {
-    //             if (mediaRecorder.state === 'recording') {
-    //                 mediaRecorder.stop()
-    //             }
-    //         }
-
-    //         mediaRecorder.start()
-    //     } catch (error) {
-    //         console.error('Erro ao processar videos: ' + error)
-    //         toast.error('Erro ao gerar seguinte vídeo: ' + files[index].name, {
-    //             style: {
-    //                 wordBreak: 'break-word',
-    //                 overflowWrap: 'break-word',
-    //             }
-    //         })
-    //         processVideo(index + 1)
-    //     }
-    // }
-
-    // processVideo()
-
-
-
-    const drawTextToCanvas = (canvas, ctx, phrase, template, activeAlignment) => {
-        const centerX = canvas.width / 2
-        const fontSize = canvas.width * 0.1
-        const maxWidth = canvas.width * 0.8
-        const lineHeight = fontSize * 1.2
-
-        ctx.font = `${fontSize}px ${template.fontFamily}`
-        ctx.fillStyle = template.color
-
-        const words = phrase.split(' ')
-        let lines = []
-        let line = ''
+        const words = quote.split(' ');
+        let lines = [];
+        let line = '';
 
         const splitWord = (word) => {
-            const parts = []
-            let current = ''
+            const parts = [];
+            let current = '';
             for (let char of word) {
                 if (ctx.measureText(current + char).width > maxWidth) {
-                    parts.push(current)
-                    current = char
+                    parts.push(current);
+                    current = char;
                 } else {
-                    current += char
+                    current += char;
                 }
             }
-            if (current) parts.push(current)
-            return parts
-        }
+            if (current) parts.push(current);
+            return parts;
+        };
 
         for (let i = 0; i < words.length; i++) {
-            let word = words[i]
+            let word = words[i];
             if (ctx.measureText(word).width > maxWidth) {
-                const parts = splitWord(word)
+                const parts = splitWord(word);
                 for (let part of parts) {
                     if (ctx.measureText(line + part).width > maxWidth && line !== '') {
-                        lines.push(line)
-                        line = part + ' '
+                        lines.push(line);
+                        line = part + ' ';
                     } else {
-                        line += part + ' '
+                        line += part + ' ';
                     }
                 }
             } else {
                 if (ctx.measureText(line + word).width > maxWidth && line !== '') {
-                    lines.push(line)
-                    line = word + ' '
+                    lines.push(line);
+                    line = word + ' ';
                 } else {
-                    line += word + ' '
+                    line += word + ' ';
                 }
             }
         }
 
-        if (line) lines.push(line)
+        if (line) lines.push(line);
 
-        const totalHeight = lines.length * lineHeight
+        const totalHeight = lines.length * lineHeight;
 
-        let y
+        let y;
         switch (activeAlignment) {
-            case 'top':
-                y = lineHeight
-                break
-            case 'bottom':
-                y = canvas.height - totalHeight + lineHeight / 2
-                break
-            case 'middle':
+            case 1:
+                y = lineHeight * 1.5;
+                break;
+            case 3:
+                y = canvas.height - totalHeight - lineHeight / 10;
+                break;
+            case 2:
             default:
-                y = (canvas.height / 2) - (totalHeight / 2) + lineHeight / 2
-                break
+                y = (canvas.height / 2) - (totalHeight / 2) + lineHeight / 2;
+                break;
         }
 
         for (let i = 0; i < lines.length; i++) {
-            const textWidth = ctx.measureText(lines[i]).width
-            ctx.fillText(lines[i], centerX - textWidth / 2, y)
+            const textWidth = ctx.measureText(lines[i]).width;
+            let x;
 
-            if (template.stroke !== 'none') {
-                ctx.lineWidth = fontSize * 0.05
-                ctx.strokeStyle = 'black'
-                ctx.strokeText(lines[i], centerX - textWidth / 2, y)
+            switch (activeTextAlignment) {
+                case 1:
+                    x = (canvas.width - maxWidth) / 2;
+                    break;
+                case 3:
+                    x = (canvas.width + maxWidth) / 2 - textWidth;
+                    break;
+                case 2:
+                default:
+                    x = centerX - textWidth / 2;
+                    break;
             }
 
-            y += lineHeight
+            ctx.fillText(lines[i], x, y);
+
+            if (stroke) {
+                ctx.lineWidth = fontSize * 0.05;
+                ctx.strokeStyle = 'black';
+                ctx.strokeText(lines[i], x, y);
+            }
+
+            y += lineHeight;
         }
     }
 
-    const drawVideoToCanvas = () => {
-
+    const drawVideoToCanvas = (canvas, ctx, video) => {
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
     }
 
-
-    const drawToCanvas = (canvas, video, quote, activeTextAlignment, activeAlignment, blockquote, underline, italic, color) => {
+    const drawToCanvas = (canvas, ctx, video, quote, activeTextAlignment, activeAlignment, bold, italic, color, font, fontSize, stroke) => {
         video.play()
-
-        const ctx = canvas.
 
         const update = () => {
             drawVideoToCanvas(canvas, ctx, video)
-            drawTextToCanvas(canvas, ctx, phrase, template, activeAlignment)
+            drawTextToCanvas(canvas, ctx, quote, activeTextAlignment, activeAlignment, bold, italic, color, font, fontSize, stroke)
             requestAnimationFrame(update)
         }
 
@@ -259,80 +156,163 @@ function Preview({ src, text }) {
     }
 
     useEffect(() => {
-        const video = document.createElement('video')
+        if (!video) {
+            const newVideo = document.createElement('video')
 
-        video.src = url
-        video.muted = true
-        video.loop = false
+            newVideo.src = url
+            newVideo.muted = true
 
-        drawToCanvas(canvas.current, video, quote, activeTextAlignment, activeAlignment, blockquote, underline, italic, color)
+            newVideo.addEventListener('ended', () => {
+                newVideo.currentTime = 0
+                newVideo.play()
+            })
 
-    }, [url, quote, activeTextAlignment, activeAlignment, blockquote, underline, italic, color])
+            setVideo(newVideo)
+
+            drawToCanvas(canvas.current, canvas.current.getContext('2d'), newVideo, quote, activeTextAlignment, activeAlignment, bold, italic, color, font, fontSize, stroke)
+        } else {
+            drawToCanvas(canvas.current, canvas.current.getContext('2d'), video, quote, activeTextAlignment, activeAlignment, bold, italic, color, font, fontSize, stroke)
+        }
+    }, [url, quote, activeTextAlignment, activeAlignment, bold, italic, color, font, fontSize, stroke])
 
     return (
         <>
-            <Box direction='row'>
+            <Box direction='row-responsive' gap={{
+                column: 'medium',
+                row: 'medium'
+            }}>
+                <canvas ref={canvas} width={video_width.display} height={video_height.display} style={{ border: '1px solid #7D4CDB', maxHeight: video_height.display, maxWidth: video_width.display }}></canvas>
                 <Box>
-                    <canvas ref={canvas} width={video_width.display} height={video_height.display} style={{ border: '1px solid #7D4CDB', width: video_width.display, height: video_height.display }}></canvas>
-                    <Form>
-                        <FormField htmlFor="video" label="Vídeo de fundo">
-                            <FileInput id="video" name="videos" accept="video/*" onChange={handleFiles} messages={{
-                                dropPromptMultiple: 'Arraste os arquivos aqui ou',
-                                browse: 'Buscar'
-                            }} />
-                        </FormField>
-
-                        <FormField htmlFor='quote' margin={{
-                            top: 'medium'
-                        }}>
-                            <TextInput id='quote' onChange={e => setQuote(e.target.value)} value={quote} />
-                        </FormField>
-
-                        <FormField margin={{
-                            top: 'medium'
-                        }}>
-                            <Select options={templates} />
-                        </FormField>
-                    </Form>
-                </Box>
-                <Box gap={'medium'} align='center'>
-                    <Box>
-                        <Text textAlign='center' size='large'>A</Text>
-                        <TextInput style={{
-                            background: color,
-                            border: 'none'
-                        }} value={color} onChange={e => setColor(e.target.value)} type='color' />
+                    <Box gap={'medium'} direction={{
+                        'small': 'row',
+                        'medium': 'column'
+                    }[size]}>
+                        <Button plain hoverIndicator icon={<Edit />} onClick={() => setEditActive(!editActive)} />
+                        <Button plain hoverIndicator icon={<Brush />} onClick={() => setCustomizationActive(!customizationActive)} />
+                        <Button plain hoverIndicator icon={<Download />} />
+                        <Button plain hoverIndicator icon={<Share />} onClick={() => setShareActive(!shareActive)} />
                     </Box>
+                    <Box>
+                        <Collapsible open={editActive}>
+                            <Box pad={{
+                                top: 'medium'
+                            }}>
+                                <Form>
+                                    <FormField htmlFor="video" label="Vídeo de fundo">
+                                        <FileInput id="video" name="videos" accept="video/*" onChange={handleFiles} messages={{
+                                            dropPromptMultiple: 'Arraste os arquivos aqui ou',
+                                            browse: 'Buscar'
+                                        }} />
+                                    </FormField>
 
-                    <Button
-                        pad={'none'}
-                        color={'brand'}
-                        onClick={() => handleActive(activeAlignment, setActiveAlignment, 3)}
-                        icon={{
-                            1: <LinkTop />,
-                            2: <Shift />,
-                            3: <LinkBottom />
-                        }[activeAlignment]}
-                    />
+                                    <FormField margin={{
+                                        top: 'medium'
+                                    }} htmlFor='quote' label="Frase">
+                                        <TextInput id='quote' onChange={e => setQuote(e.target.value)} value={quote} placeholder="Reescreva a frase, se necessário" />
+                                    </FormField>
 
-                    <Button pad={'none'} color={'brand'} onClick={() => setBold(!bold)} primary={bold} icon={<Bold />} />
-                    <Button pad={'none'} color={'brand'} onClick={() => setItalic(!italic)} primary={italic} icon={<Italic />} />
-                    <Button pad={'none'} color={'brand'} onClick={() => setUnderline(!underline)} primary={underline} icon={<Underline />} />
-                    <Button pad={'none'} color={'brand'} onClick={() => setBlockQuote(!blockquote)} primary={blockquote} icon={<BlockQuote />} />
+                                    <FormField margin={{
+                                        top: 'medium'
+                                    }} htmlFor='font' label="Fonte">
+                                        <Select id='font' value={font} labelKey={'title'} valueKey={'fontFamily'} onChange={({ option }) => setFont(option.fontFamily)} options={fonts} />
+                                    </FormField>
+                                </Form>
+                            </Box>
+                        </Collapsible>
 
-                    <Button
-                        pad={'none'}
-                        color={'brand'}
-                        onClick={() => handleActive(activeTextAlignment, setActiveTextAlignment, 4)}
-                        icon={{
-                            1: <TextAlignLeft />,
-                            2: <TextAlignCenter />,
-                            3: <TextAlignFull />,
-                            4: <TextAlignRight />
-                        }[activeTextAlignment]}
-                    />
-                </Box>
-            </Box>
+                        <Collapsible open={customizationActive}>
+                            <Box pad={{
+                                top: 'medium'
+                            }} gap={'medium'} align='center' direction={{
+                                'small': 'row',
+                                'medium': 'column'
+                            }[size]}>
+                                <Box width={'24px'} height={'24px'} style={{
+                                    position: 'relative'
+                                }}>
+                                    <Button
+                                        hoverIndicator
+                                        color={'brand'}
+                                        style={{
+                                            position: 'absolute',
+                                            top: 0,
+                                            left: 0
+                                        }}
+                                        pad={'none'}
+                                        onClick={() => setDisplayColorPicker(!displayColorPicker)}
+                                        icon={<Grommet color={color} />}
+                                    />
+                                    {displayColorPicker && <CompactPicker styles={{
+                                        default: {
+                                            compact: {
+                                                position: 'absolute',
+                                                left: '0',
+                                                transform: 'translateY(40%)',
+                                                background: 'white'
+                                            }
+                                        }
+                                    }} color={color} onChange={({ hex }) => setColor(hex)} />}
+                                </Box>
+
+
+
+                                <Button
+                                    pad={'none'}
+                                    hoverIndicator
+                                    color={'brand'}
+                                    onClick={() => handleActive(activeAlignment, setActiveAlignment, 3)}
+                                    icon={{
+                                        1: <LinkTop />,
+                                        2: <Shift />,
+                                        3: <LinkBottom />
+                                    }[activeAlignment]}
+                                />
+
+                                <Button
+                                    pad={'none'}
+                                    hoverIndicator
+                                    color={'brand'}
+                                    onClick={() => handleActive(activeTextAlignment, setActiveTextAlignment, 3)}
+                                    icon={{
+                                        1: <TextAlignLeft />,
+                                        2: <TextAlignCenter />,
+                                        3: <TextAlignRight />
+                                    }[activeTextAlignment]}
+                                />
+
+                                <Button style={{
+                                    color: stroke ? 'white' : 'black',
+                                    borderRadius: '50%',
+                                    width: '24px',
+                                    textAlign: 'center',
+                                    WebkitTextStroke: `1px ${stroke ? 'black' : 'white'}`,
+                                    fontWeight: 'bold',
+                                    height: '24px',
+                                }} plain pad={'none'} hoverIndicator color={'brand'} onClick={() => setStroke(!stroke)} primary={stroke} label="S" />
+
+                                <Button pad={'none'} hoverIndicator color={'brand'} onClick={() => setBold(!bold)} primary={bold} icon={<Bold />} />
+                                <Button pad={'none'} hoverIndicator color={'brand'} onClick={() => setItalic(!italic)} primary={italic} icon={<Italic />} />
+                                <Button pad={'none'} hoverIndicator color={'brand'} onClick={() => fontSize < 64 ? setFontSize(fontSize + 1) : ''} icon={<Add />} />
+                                <Button pad={'none'} hoverIndicator color={'brand'} onClick={() => fontSize > 12 ? setFontSize(fontSize - 1) : ''} icon={<Subtract />} />
+                            </Box>
+                        </Collapsible>
+
+                        <Collapsible open={shareActive}>
+                            <Box align='center' pad={{
+                                top: 'medium'
+                            }} direction={{
+                                'small': 'row',
+                                'medium': 'column'
+                            }[size]} gap={'medium'}>
+                                <Button plain hoverIndicator icon={<Tiktok />} />
+                                <Button plain hoverIndicator icon={<Instagram />} />
+                                <Button plain hoverIndicator icon={<Youtube />} />
+                                <Button plain hoverIndicator icon={<Facebook />} />
+                            </Box>
+                        </Collapsible>
+                    </Box>
+                </Box >
+            </Box >
         </>
     )
 }

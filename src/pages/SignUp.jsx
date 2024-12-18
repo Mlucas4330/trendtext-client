@@ -7,9 +7,7 @@ function SignUp() {
     const { signUp, busy } = useAuth()
 
     return <>
-        <Box margin={{
-            horizontal: 'xlarge'
-        }}>
+        <Box>
             <Form messages={{
                 required: 'Campo obrigatório'
             }} onSubmit={({ value }) => signUp(value)}>

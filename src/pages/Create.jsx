@@ -1,5 +1,5 @@
-import { Box, Button, Form, FormField, Heading, Text, TextInput } from 'grommet'
-import { videoDurations, videoQuantities } from '../constants'
+import { Box, Button, Form, FormField, Heading, Select, Text, TextInput } from 'grommet'
+import { videoDurations, videoQuantities, videos } from '../constants'
 import { useEffect, useState, React } from 'react'
 import axios from 'axios'
 import Preview from '../components/Preview'
@@ -11,7 +11,16 @@ function Create() {
     const [pexels, setPexels] = useState(null)
     const [videoQuantity, setVideoQuantity] = useState(7)
     const [videoDuration, setVideoDuration] = useState(10)
-    const [videoPreviews, setVideoPreviews] = useState([])
+    const [videoPreviews, setVideoPreviews] = useState([{
+        src: videos[0].src,
+        text: 'Teste frase longa'
+    }, {
+        src: videos[0].src,
+        text: 'Teste frase longa'
+    }, {
+        src: videos[0].src,
+        text: 'Teste frase longa'
+    }])
 
     const handleSubmit = async () => {
         // if (!user || user.credits < 7) {
@@ -56,11 +65,9 @@ function Create() {
 
     return (
         <>
-            <Box gap={'large'} margin={{
-                horizontal: 'xlarge'
-            }}>
+            <Box gap={'large'}>
                 <Box>
-                    <Heading margin={'none'} textAlign='center'>Dados</Heading>
+                    <Heading margin={'none'} alignSelf='center' textAlign='center'>Dados</Heading>
                     <Text textAlign='center'>Preencha os dados para gerar seus vídeos</Text>
                 </Box>
                 <Form>
@@ -71,7 +78,7 @@ function Create() {
                     <FormField margin={{
                         top: 'medium'
                     }} required label="Duração">
-                        <Box pad={'small'} direction='row' gap={'small'}>
+                        <Box pad={'small'} direction='row-responsive' gap={'small'}>
                             {
                                 videoDurations.map((videoDuration_, index) => (
                                     <Button key={`video_durations_${index}`} onClick={() => setVideoDuration(videoDuration_.value)} primary={videoDuration === videoDuration_.value} color={'brand'} label={videoDuration_.label} />
@@ -82,130 +89,29 @@ function Create() {
 
                     <FormField margin={{
                         top: 'medium'
-                    }} required label="Quantidade">
-                        <Box pad={'small'} direction='row' gap={'small'}>
-                            {
-                                videoQuantities.map((videoQuantity_, index) => (
-                                    <Button key={`video_quantities_${index}`} onClick={() => setVideoQuantity(videoQuantity_.value)} primary={videoQuantity === videoQuantity_.value} color={'brand'} label={videoQuantity_.label} />
-                                ))
-                            }
-                        </Box>
+                    }} htmlFor='videoQuantity' required label="Quantidade">
+                        <Select id='videoQuantity' value={videoQuantity} labelKey={'label'} valueKey={'value'} onChange={({ option }) => setVideoQuantity(option.value)} options={videoQuantities} />
                     </FormField>
 
                     <Button margin={{ top: 'medium' }} fill="horizontal" busy={busy} onClick={handleSubmit} secondary pad={'small'} label="Gerar Vídeos" />
                 </Form>
-                {
-                    videoPreviews.length > 0 &&
-                    <Box>
+            </Box>
+            {
+                videoPreviews.length > 0 &&
+                <Box gap={'medium'}>
+                    <Box wrap gap={{
+                        column: 'medium',
+                        row: 'medium'
+                    }} direction='row-responsive'>
                         {
                             videoPreviews.map((video, index) => (
                                 <Preview src={video.src} text={video.text} key={`video_previews_${index}`} />
                             ))
                         }
                     </Box>
-                }
-            </Box>
-            {/* <Box direction="row-responsive" gap={'xlarge'}>
-                <Box flex >
-
-                    <Form>
-                        {show && <Layer background={'#111827'} style={{
-                            padding: '1rem'
-                        }} onEsc={() => setShow(false)} responsive={false} onClickOutside={() => setShow(false)}>
-                            <Box align='end'>
-                                <Button onClick={() => setShow(false)} icon={<Close />} />
-                            </Box>
-                            <FormField htmlFor="niche" label="Escolha o Nicho">
-                                <Box direction="row">
-                                    <Box flex>
-                                        <Select plain id="niche" options={niches} value={niche} onChange={({ option }) => setNiche(option.value)} labelKey="label" valueKey="value" placeholder="Selecione" />
-                                    </Box>
-                                </Box>
-                            </FormField>
-                            <Button onClick={handleIA} label="Gerar Frases" />
-                        </Layer>}
-
-                        {showPhrasesSplitter && <Layer responsive={false} background={'#111827'} style={{
-                            padding: '1rem'
-                        }} onEsc={() => setShowPhrasesSplitter(false)} onClickOutside={() => setShowPhrasesSplitter(false)}>
-                            <Box align='end'>
-                                <Button onClick={() => setShowPhrasesSplitter(false)} icon={<Close />} />
-                            </Box>
-                            <FormField htmlFor="splitter" label="Separar frases por">
-                                <TextInput id='splitter' onChange={(e) => setSplitter(e.target.value)} value={splitter} />
-                            </FormField>
-                            <Button onClick={handleSplitter} label="Gerar Frases" />
-                        </Layer>}
-
-                        <FormField htmlFor="videos" required label="Vídeos de fundo">
-                            <FileInput id="videos" name="videos" accept="video/*" multiple onChange={handleFiles} messages={{
-                                dropPromptMultiple: 'Arraste os arquivos aqui ou',
-                                browse: 'Buscar'
-                            }} />
-                        </FormField>
-
-                        <Box margin={{
-                            top: 'medium'
-                        }} >
-                            <FormField label="Adicione Frases Manualmente">
-                                <Box direction="row">
-                                    <Box flex>
-                                        <TextInput onPaste={handlePaste} value={phrase} plain onKeyDown={handleKeyDown} onChange={e => setPhrase(e.target.value)} placeholder='Ex. Minha vida é um meme, e eu sou o protagonista!' />
-                                    </Box>
-                                    {phrase && <Button hoverIndicator icon={<Add />} onClick={handlePhrase} />}
-                                    <Tip dropProps={{
-                                        align: {
-                                            top: 'bottom',
-                                            right: 'left'
-                                        }
-                                    }} content="Gerar as frases automaticamente com Inteligência Artificial">
-                                        <Button hoverIndicator icon={<Magic />} onClick={() => setShow(true)} />
-                                    </Tip>
-                                </Box>
-                            </FormField>
-                            {
-                                phrases.length > 0 && <DragDropContext onDragEnd={handleDragEnd}>
-                                    <Droppable droppableId="phrases" type="list" direction="vertical">
-                                        {(provided) => (
-                                            <Box gap={'small'} ref={provided.innerRef} {...provided.droppableProps}>
-                                                {phrases.map((phrase, index) => (
-                                                    <Draggable key={index} draggableId={index.toString()} index={index}>
-                                                        {(provided) => (
-                                                            <Box direction="row"
-                                                                align="center"
-                                                                justify="between"
-                                                                ref={provided.innerRef}
-                                                                {...provided.draggableProps}
-                                                                {...provided.dragHandleProps}>
-                                                                <Button icon={<Drag />} hoverIndicator />
-                                                                <TextInput onChange={e => handleEditPhrase(e.target.value, index)} value={phrase} />
-                                                                <Button
-                                                                    icon={<Close />}
-                                                                    onClick={() => deletePhrase(index)}
-                                                                    hoverIndicator
-                                                                />
-                                                            </Box>
-                                                        )}
-                                                    </Draggable>
-                                                ))}
-                                                {provided.placeholder}
-                                            </Box>
-                                        )}
-                                    </Droppable>
-                                </DragDropContext>
-                            }
-                        </Box>
-
-
-                    </Form>
+                    <Button label="Baixar todos" />
                 </Box>
-                <Box align="center" gap={'large'}>
-                    <Box>
-                        <Heading margin={'none'} textAlign="center">Prévia</Heading>
-                        <Text textAlign="center">Como vão ficar os seus vídeos</Text>
-                    </Box>
-                </Box>
-            </Box> */}
+            }
         </>
     )
 }
